@@ -1,0 +1,106 @@
+"""Publish approved Eurogrid posts to Instagram (Instagram API with Instagram Login).
+
+Each post lives in posts/<folder>/ with post.json:
+  {"publish_at": "2026-11-11T20:00:00+09:00", "approved": true,
+   "caption": "...", "images": ["1.jpg", "2.jpg"]}
+A post is published when approved is true, publish_at has passed and
+published.json does not exist yet. published.json is written afterwards.
+"""
+import datetime as dt
+import json
+import os
+import pathlib
+import sys
+import time
+import urllib.parse
+import urllib.request
+
+API = "https://graph.instagram.com/v23.0"
+REPO = os.environ.get("GITHUB_REPOSITORY", "shonke1026/eurogrid-posts")
+BRANCH = os.environ.get("GITHUB_REF_NAME", "main")
+TOKEN = os.environ.get("IG_ACCESS_TOKEN", "")
+DRY = os.environ.get("DRY_RUN") == "1"
+ROOT = pathlib.Path(__file__).resolve().parent.parent / "posts"
+
+
+def call(method, path, **params):
+    params["access_token"] = TOKEN
+    data = urllib.parse.urlencode(params).encode()
+    url = f"{API}/{path}"
+    if method == "GET":
+        req = urllib.request.Request(url + "?" + data.decode())
+    else:
+        req = urllib.request.Request(url, data=data, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return json.load(r)
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors="replace").replace(TOKEN, "***")
+        raise SystemExit(f"API error {e.code} on {path}: {body}")
+
+
+def wait_ready(cid):
+    for _ in range(30):
+        st = call("GET", cid, fields="status_code").get("status_code")
+        if st == "FINISHED":
+            return
+        if st in ("ERROR", "EXPIRED"):
+            raise SystemExit(f"container {cid} status {st}")
+        time.sleep(5)
+    raise SystemExit(f"container {cid} not ready in time")
+
+
+def raw_url(folder, name):
+    return f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/posts/{folder}/{urllib.parse.quote(name)}"
+
+
+def publish(folder, post):
+    imgs = post["images"]
+    for n in imgs:
+        if not n.lower().endswith((".jpg", ".jpeg")):
+            raise SystemExit(f"{folder}/{n}: Instagram accepts JPEG only")
+    if DRY:
+        print(f"[dry-run] would publish {folder}: {len(imgs)} image(s)")
+        for n in imgs:
+            print("   ", raw_url(folder, n))
+        return None
+    if len(imgs) == 1:
+        cid = call("POST", "me/media", image_url=raw_url(folder, imgs[0]), caption=post["caption"])["id"]
+    else:
+        children = []
+        for n in imgs:
+            c = call("POST", "me/media", image_url=raw_url(folder, n), is_carousel_item="true")["id"]
+            wait_ready(c)
+            children.append(c)
+        cid = call("POST", "me/media", media_type="CAROUSEL", children=",".join(children), caption=post["caption"])["id"]
+    wait_ready(cid)
+    return call("POST", "me/media_publish", creation_id=cid)["id"]
+
+
+def main():
+    if not TOKEN and not DRY:
+        sys.exit("IG_ACCESS_TOKEN is not set")
+    now = dt.datetime.now(dt.timezone.utc)
+    done = 0
+    for d in sorted(p for p in ROOT.iterdir() if p.is_dir()):
+        meta, out = d / "post.json", d / "published.json"
+        if not meta.exists() or out.exists():
+            continue
+        post = json.loads(meta.read_text(encoding="utf-8"))
+        if not post.get("approved"):
+            print(f"skip {d.name}: not approved")
+            continue
+        when = dt.datetime.fromisoformat(post["publish_at"])
+        if when > now:
+            print(f"wait {d.name}: scheduled {post['publish_at']}")
+            continue
+        media_id = publish(d.name, post)
+        if media_id:
+            out.write_text(json.dumps({"media_id": media_id, "published_at": now.isoformat()}, ensure_ascii=False, indent=2))
+            print(f"published {d.name}: media {media_id}")
+            done += 1
+    print(f"done: {done} post(s) published")
+
+
+if __name__ == "__main__":
+    main()

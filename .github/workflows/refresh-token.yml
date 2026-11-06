@@ -1,0 +1,26 @@
+name: Refresh Instagram token
+on:
+  schedule:
+    - cron: "0 0 1,15 * *"
+  workflow_dispatch:
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extend token lifetime
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request, sys
+          t = os.environ["IG_ACCESS_TOKEN"]
+          url = "https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=" + t
+          try:
+              r = json.load(urllib.request.urlopen(url, timeout=60))
+          except Exception as e:
+              sys.exit("refresh failed: " + str(e).replace(t, "***"))
+          days = int(r.get("expires_in", 0)) // 86400
+          print(f"token valid for about {days} more days")
+          if r.get("access_token") != t:
+              sys.exit("Instagram returned a NEW token. Update the IG_ACCESS_TOKEN secret with a freshly generated token.")
+          PY
