@@ -21,3 +21,19 @@ jobs:
               sys.exit("Token check FAILED (expired or revoked?): " + str(e).replace(t, "***"))
           print("Token OK for @" + r.get("username", "?"))
           PY
+      - name: Check that the Threads token still works
+        env:
+          TH: ${{ secrets.THREADS_ACCESS_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys, urllib.request
+          t = os.environ.get("TH", "")
+          if not t:
+              print("THREADS_ACCESS_TOKEN not set yet; skipped"); sys.exit(0)
+          url = "https://graph.threads.net/v1.0/me?fields=username&access_token=" + t
+          try:
+              r = json.load(urllib.request.urlopen(url, timeout=60))
+          except Exception as e:
+              sys.exit("Threads token check FAILED (expired or revoked?): " + str(e).replace(t, "***"))
+          print("Threads token OK for @" + r.get("username", "?"))
+          PY

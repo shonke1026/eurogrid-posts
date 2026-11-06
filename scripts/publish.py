@@ -3,6 +3,8 @@
 Each post lives in posts/<folder>/ with post.json:
   {"publish_at": "2026-11-11T20:00:00+09:00", "approved": true,
    "caption": "...", "images": ["1.jpg", "2.jpg"]}
+For Threads add "platform": "threads" with "text" (and optional "topic_tag", "reply")
+instead of caption/images.
 A post is published when approved is true, publish_at has passed and
 published.json does not exist yet. published.json is written afterwards.
 """
@@ -20,14 +22,17 @@ IG_USER_ID = os.environ.get("IG_USER_ID", "17841466770737433")
 REPO = os.environ.get("GITHUB_REPOSITORY", "shonke1026/eurogrid-posts")
 BRANCH = os.environ.get("GITHUB_REF_NAME", "main")
 TOKEN = os.environ.get("IG_ACCESS_TOKEN", "")
+TH_TOKEN = os.environ.get("THREADS_ACCESS_TOKEN", "")
+TH_API = "https://graph.threads.net/v1.0"
 DRY = os.environ.get("DRY_RUN") == "1"
 ROOT = pathlib.Path(__file__).resolve().parent.parent / "posts"
 
 
-def call(method, path, **params):
-    params["access_token"] = TOKEN
+def call(method, path, base=None, token=None, **params):
+    token = token or TOKEN
+    params["access_token"] = token
     data = urllib.parse.urlencode(params).encode()
-    url = f"{API}/{path}"
+    url = f"{base or API}/{path}"
     if method == "GET":
         req = urllib.request.Request(url + "?" + data.decode())
     else:
@@ -36,7 +41,7 @@ def call(method, path, **params):
         with urllib.request.urlopen(req, timeout=60) as r:
             return json.load(r)
     except urllib.error.HTTPError as e:
-        body = e.read().decode(errors="replace").replace(TOKEN, "***")
+        body = e.read().decode(errors="replace").replace(token, "***")
         raise SystemExit(f"API error {e.code} on {path}: {body}")
 
 
@@ -55,7 +60,32 @@ def raw_url(folder, name):
     return f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/posts/{folder}/{urllib.parse.quote(name)}"
 
 
+def th(method, path, **params):
+    return call(method, path, base=TH_API, token=TH_TOKEN, **params)
+
+
+def publish_threads(folder, post):
+    """Text post on Threads. Optional: topic_tag, reply (posted as a reply, e.g. sources)."""
+    if DRY:
+        print(f"[dry-run] would post to Threads {folder}: {post['text'][:40]}...")
+        return None
+    if not TH_TOKEN:
+        raise SystemExit("THREADS_ACCESS_TOKEN is not set")
+    extra = {"topic_tag": post["topic_tag"]} if post.get("topic_tag") else {}
+    cid = th("POST", "me/threads", media_type="TEXT", text=post["text"], **extra)["id"]
+    time.sleep(10)
+    mid = th("POST", "me/threads_publish", creation_id=cid)["id"]
+    if post.get("reply"):
+        time.sleep(5)
+        rid = th("POST", "me/threads", media_type="TEXT", text=post["reply"], reply_to_id=mid)["id"]
+        time.sleep(10)
+        th("POST", "me/threads_publish", creation_id=rid)
+    return mid
+
+
 def publish(folder, post):
+    if post.get("platform") == "threads":
+        return publish_threads(folder, post)
     imgs = post["images"]
     for n in imgs:
         if not n.lower().endswith((".jpg", ".jpeg")):
@@ -79,8 +109,8 @@ def publish(folder, post):
 
 
 def main():
-    if not TOKEN and not DRY:
-        sys.exit("IG_ACCESS_TOKEN is not set")
+    if not (TOKEN or TH_TOKEN) and not DRY:
+        sys.exit("no access token is set")
     now = dt.datetime.now(dt.timezone.utc)
     done = 0
     for d in sorted(p for p in ROOT.iterdir() if p.is_dir()):
