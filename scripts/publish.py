@@ -6,6 +6,10 @@ Each post lives in posts/<folder>/ with post.json:
 For Threads add "platform": "threads" with "text" (and optional "topic_tag", "reply",
 "images": ["1.jpg", ...] for an image or carousel post)
 instead of caption/images.
+For a reel/video add "video": "reel.mp4" instead of "images" (Instagram REELS,
+Threads VIDEO). Optional for Instagram: "cover": "cover.jpg".
+`python3 scripts/publish.py --check <folder>` only creates the media containers and
+waits until Meta has processed them (nothing is published; containers expire in 24h).
 A post is published when approved is true, publish_at has passed and
 published.json does not exist yet. published.json is written afterwards.
 """
@@ -46,8 +50,8 @@ def call(method, path, base=None, token=None, **params):
         raise SystemExit(f"API error {e.code} on {path}: {body}")
 
 
-def wait_ready(cid):
-    for _ in range(30):
+def wait_ready(cid, tries=30):
+    for _ in range(tries):
         st = call("GET", cid, fields="status_code").get("status_code")
         if st == "FINISHED":
             return
@@ -65,6 +69,20 @@ def th(method, path, **params):
     return call(method, path, base=TH_API, token=TH_TOKEN, **params)
 
 
+def th_wait(cid, tries=60):
+    for _ in range(tries):
+        r = th("GET", cid, fields="status,error_message")
+        if r.get("status") == "FINISHED":
+            return
+        if r.get("status") in ("ERROR", "EXPIRED"):
+            raise SystemExit(f"Threads container {cid}: {r}")
+        time.sleep(5)
+    raise SystemExit(f"Threads container {cid} not ready in time")
+
+
+CHECK = False
+
+
 def publish_threads(folder, post):
     """Text post on Threads. Optional: topic_tag, reply (posted as a reply, e.g. sources)."""
     if DRY:
@@ -74,7 +92,13 @@ def publish_threads(folder, post):
         raise SystemExit("THREADS_ACCESS_TOKEN is not set")
     extra = {"topic_tag": post["topic_tag"]} if post.get("topic_tag") else {}
     imgs = post.get("images", [])
-    if not imgs:
+    if post.get("video"):
+        cid = th("POST", "me/threads", media_type="VIDEO", video_url=raw_url(folder, post["video"]), text=post["text"], **extra)["id"]
+        th_wait(cid)
+        if CHECK:
+            print(f"[check] Threads video container {cid} is ready (not published)")
+            return None
+    elif not imgs:
         cid = th("POST", "me/threads", media_type="TEXT", text=post["text"], **extra)["id"]
     elif len(imgs) == 1:
         cid = th("POST", "me/threads", media_type="IMAGE", image_url=raw_url(folder, imgs[0]), text=post["text"], **extra)["id"]
@@ -82,7 +106,8 @@ def publish_threads(folder, post):
         kids = [th("POST", "me/threads", media_type="IMAGE", image_url=raw_url(folder, n), is_carousel_item="true")["id"] for n in imgs]
         time.sleep(15)
         cid = th("POST", "me/threads", media_type="CAROUSEL", children=",".join(kids), text=post["text"], **extra)["id"]
-    time.sleep(30 if imgs else 10)
+    if not post.get("video"):
+        time.sleep(30 if imgs else 10)
     mid = th("POST", "me/threads_publish", creation_id=cid)["id"]
     if post.get("reply"):
         time.sleep(5)
@@ -92,9 +117,28 @@ def publish_threads(folder, post):
     return mid
 
 
+def publish_reel(folder, post):
+    v = post["video"]
+    if not v.lower().endswith(".mp4"):
+        raise SystemExit(f"{folder}/{v}: use an MP4 file")
+    if DRY:
+        print(f"[dry-run] would publish reel {folder}: {raw_url(folder, v)}")
+        return None
+    extra = {"cover_url": raw_url(folder, post["cover"])} if post.get("cover") else {}
+    cid = call("POST", f"{IG_USER_ID}/media", media_type="REELS", video_url=raw_url(folder, v),
+               caption=post["caption"], share_to_feed="true", **extra)["id"]
+    wait_ready(cid, tries=72)
+    if CHECK:
+        print(f"[check] Instagram reel container {cid} is ready (not published)")
+        return None
+    return call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"]
+
+
 def publish(folder, post):
     if post.get("platform") == "threads":
         return publish_threads(folder, post)
+    if post.get("video"):
+        return publish_reel(folder, post)
     imgs = post["images"]
     for n in imgs:
         if not n.lower().endswith((".jpg", ".jpeg")):
@@ -118,6 +162,14 @@ def publish(folder, post):
 
 
 def main():
+    global CHECK
+    if len(sys.argv) == 3 and sys.argv[1] == "--check":
+        CHECK = True
+        d = ROOT / sys.argv[2]
+        post = json.loads((d / "post.json").read_text(encoding="utf-8"))
+        publish(d.name, post)
+        print("check finished")
+        return
     if not (TOKEN or TH_TOKEN) and not DRY:
         sys.exit("no access token is set")
     now = dt.datetime.now(dt.timezone.utc)

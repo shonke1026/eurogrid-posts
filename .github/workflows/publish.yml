@@ -7,6 +7,9 @@ on:
       dry_run:
         description: "1 = check only, do not post"
         default: "1"
+      check_folder:
+        description: "posts/<folder> to test (creates containers only, nothing is posted)"
+        default: ""
 permissions:
   contents: write
 concurrency:
@@ -22,7 +25,9 @@ jobs:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           DRY_RUN: ${{ github.event.inputs.dry_run || '0' }}
-        run: python3 scripts/publish.py
+          CHECK_FOLDER: ${{ github.event.inputs.check_folder || '' }}
+        run: |
+          if [ -n "$CHECK_FOLDER" ]; then python3 scripts/publish.py --check "$CHECK_FOLDER"; else python3 scripts/publish.py; fi
       - name: Record published posts
         run: |
           git config user.name "eurogrid-bot"
