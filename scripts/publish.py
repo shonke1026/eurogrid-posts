@@ -3,7 +3,8 @@
 Each post lives in posts/<folder>/ with post.json:
   {"publish_at": "2026-11-11T20:00:00+09:00", "approved": true,
    "caption": "...", "images": ["1.jpg", "2.jpg"]}
-For Threads add "platform": "threads" with "text" (and optional "topic_tag", "reply")
+For Threads add "platform": "threads" with "text" (and optional "topic_tag", "reply",
+"images": ["1.jpg", ...] for an image or carousel post)
 instead of caption/images.
 A post is published when approved is true, publish_at has passed and
 published.json does not exist yet. published.json is written afterwards.
@@ -72,8 +73,16 @@ def publish_threads(folder, post):
     if not TH_TOKEN:
         raise SystemExit("THREADS_ACCESS_TOKEN is not set")
     extra = {"topic_tag": post["topic_tag"]} if post.get("topic_tag") else {}
-    cid = th("POST", "me/threads", media_type="TEXT", text=post["text"], **extra)["id"]
-    time.sleep(10)
+    imgs = post.get("images", [])
+    if not imgs:
+        cid = th("POST", "me/threads", media_type="TEXT", text=post["text"], **extra)["id"]
+    elif len(imgs) == 1:
+        cid = th("POST", "me/threads", media_type="IMAGE", image_url=raw_url(folder, imgs[0]), text=post["text"], **extra)["id"]
+    else:
+        kids = [th("POST", "me/threads", media_type="IMAGE", image_url=raw_url(folder, n), is_carousel_item="true")["id"] for n in imgs]
+        time.sleep(15)
+        cid = th("POST", "me/threads", media_type="CAROUSEL", children=",".join(kids), text=post["text"], **extra)["id"]
+    time.sleep(30 if imgs else 10)
     mid = th("POST", "me/threads_publish", creation_id=cid)["id"]
     if post.get("reply"):
         time.sleep(5)
