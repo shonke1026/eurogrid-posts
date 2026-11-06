@@ -1,0 +1,29 @@
+name: Make voice
+
+on:
+  push:
+    paths:
+      - "voice/**/lines.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    services:
+      voicevox:
+        image: voicevox/voicevox_engine:cpu-latest
+        ports:
+          - 50021:50021
+    steps:
+      - uses: actions/checkout@v4
+      - name: Synthesize
+        run: python3 scripts/voice.py
+      - name: Commit voice files
+        run: |
+          git config user.name "eurogrid-bot"
+          git config user.email "eurogrid-bot@users.noreply.github.com"
+          git add voice
+          git diff --cached --quiet || (git commit -m "Add voice files" && git push)
