@@ -1,4 +1,4 @@
-"""Publish approved Eurogrid posts to Instagram (Instagram API with Instagram Login).
+"""Publish approved Eurogrid posts to Instagram (Instagram Graph API, system user token).
 
 Each post lives in posts/<folder>/ with post.json:
   {"publish_at": "2026-11-11T20:00:00+09:00", "approved": true,
@@ -15,7 +15,8 @@ import time
 import urllib.parse
 import urllib.request
 
-API = "https://graph.instagram.com/v23.0"
+API = "https://graph.facebook.com/v23.0"
+IG_USER_ID = os.environ.get("IG_USER_ID", "17841466770737433")
 REPO = os.environ.get("GITHUB_REPOSITORY", "shonke1026/eurogrid-posts")
 BRANCH = os.environ.get("GITHUB_REF_NAME", "main")
 TOKEN = os.environ.get("IG_ACCESS_TOKEN", "")
@@ -65,16 +66,16 @@ def publish(folder, post):
             print("   ", raw_url(folder, n))
         return None
     if len(imgs) == 1:
-        cid = call("POST", "me/media", image_url=raw_url(folder, imgs[0]), caption=post["caption"])["id"]
+        cid = call("POST", f"{IG_USER_ID}/media", image_url=raw_url(folder, imgs[0]), caption=post["caption"])["id"]
     else:
         children = []
         for n in imgs:
-            c = call("POST", "me/media", image_url=raw_url(folder, n), is_carousel_item="true")["id"]
+            c = call("POST", f"{IG_USER_ID}/media", image_url=raw_url(folder, n), is_carousel_item="true")["id"]
             wait_ready(c)
             children.append(c)
-        cid = call("POST", "me/media", media_type="CAROUSEL", children=",".join(children), caption=post["caption"])["id"]
+        cid = call("POST", f"{IG_USER_ID}/media", media_type="CAROUSEL", children=",".join(children), caption=post["caption"])["id"]
     wait_ready(cid)
-    return call("POST", "me/media_publish", creation_id=cid)["id"]
+    return call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"]
 
 
 def main():
