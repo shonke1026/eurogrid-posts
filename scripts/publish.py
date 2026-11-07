@@ -6,6 +6,7 @@ Each post lives in posts/<folder>/ with post.json:
 For Threads add "platform": "threads" with "text" (and optional "topic_tag", "reply",
 "images": ["1.jpg", ...] for an image or carousel post)
 instead of caption/images.
+For Instagram Stories add "story": true with "images" (1080x1920 JPEG, one frame each).
 For a reel/video add "video": "reel.mp4" instead of "images" (Instagram REELS,
 Threads VIDEO). Optional for Instagram: "cover": "cover.jpg".
 `python3 scripts/publish.py --check <folder>` only creates the media containers and
@@ -134,7 +135,36 @@ def publish_reel(folder, post):
     return call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"]
 
 
+def publish_story(folder, post):
+    """Instagram Stories: "story": true with "images" (JPEG, 1080x1920) and/or "video".
+    Each file becomes one story frame, published in the listed order."""
+    files = list(post.get("images", []))
+    if post.get("video"):
+        files.append(post["video"])
+    if DRY:
+        print(f"[dry-run] would publish {len(files)} story frame(s) from {folder}")
+        return None
+    ids = []
+    for n in files:
+        if n.lower().endswith(".mp4"):
+            cid = call("POST", f"{IG_USER_ID}/media", media_type="STORIES", video_url=raw_url(folder, n))["id"]
+            wait_ready(cid, tries=72)
+        else:
+            if not n.lower().endswith((".jpg", ".jpeg")):
+                raise SystemExit(f"{folder}/{n}: Instagram accepts JPEG only")
+            cid = call("POST", f"{IG_USER_ID}/media", media_type="STORIES", image_url=raw_url(folder, n))["id"]
+            wait_ready(cid)
+        if CHECK:
+            print(f"[check] story container {cid} for {n} is ready (not published)")
+            continue
+        ids.append(call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"])
+        time.sleep(3)
+    return ",".join(ids) if ids else None
+
+
 def publish(folder, post):
+    if post.get("story"):
+        return publish_story(folder, post)
     if post.get("platform") == "threads":
         return publish_threads(folder, post)
     if post.get("video"):
