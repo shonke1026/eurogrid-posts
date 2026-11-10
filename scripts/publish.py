@@ -4,7 +4,8 @@ Each post lives in posts/<folder>/ with post.json:
   {"publish_at": "2026-11-11T20:00:00+09:00", "approved": true,
    "caption": "...", "images": ["1.jpg", "2.jpg"]}
 For Threads add "platform": "threads" with "text" (and optional "topic_tag", "reply",
-"images": ["1.jpg", ...] for an image or carousel post)
+"images": ["1.jpg", ...] for an image or carousel post, or "reply_to_id": "<media id>"
+to post the text as a reply under an existing post)
 instead of caption/images.
 For Instagram Stories add "story": true with "images" (1080x1920 JPEG, one frame each).
 For a reel/video add "video": "reel.mp4" instead of "images" (Instagram REELS,
@@ -100,6 +101,8 @@ def publish_threads(folder, post):
             print(f"[check] Threads video container {cid} is ready (not published)")
             return None
     elif not imgs:
+        if post.get("reply_to_id"):
+            extra = {"reply_to_id": post["reply_to_id"]}
         cid = th("POST", "me/threads", media_type="TEXT", text=post["text"], **extra)["id"]
     elif len(imgs) == 1:
         cid = th("POST", "me/threads", media_type="IMAGE", image_url=raw_url(folder, imgs[0]), text=post["text"], **extra)["id"]
