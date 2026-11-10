@@ -19,6 +19,10 @@
 - プロフィールのリンク：「X（速報）」と「note（深掘り）」
 - 当たった投稿の返信の最後に、自己紹介＋note の案内を1回だけ入れる（同じ投稿に何度も入れない）
 
+## フォロー（2026-11-11〜11-24 の試し、運営者の指示）
+- Claude が、MotoGP や日本人ライダーについて日本語で投稿している個人を、1日5件までフォローする。手順と選ぶ条件は .claude/agents/community.md
+- いいね・返信はしない。11/25 からは止める（続けるかは運営者が決める）
+
 ## 投稿のしかた（Claude用）
 - posts/<日付-名前>/post.json を作り、OKのあと main に push
   - 通常：`{"platform":"threads","publish_at":"…+09:00","approved":true,"text":"本文","topic_tag":"MotoGP","reply":"出典\n媒体名 URL"}`
