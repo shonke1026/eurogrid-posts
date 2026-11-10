@@ -1,14 +1,23 @@
-# 画像の型
+# 画像の型（2026-11-11 から新しいデザイン。決まりは CLAUDE.md の13）
 
-- note_header.html：note の見出し画像（1280×670、deviceScaleFactor 2 で撮る）。差し替えるのは h1・.sub・.race の3か所
-- note_book_card.html：note の「この回の一冊」カード（1280×670、2倍）。書名・著者・3点・値段と日付を差し替える。実物の表紙は使わない
-- carousel.py：Instagram カルーセル（1080×1350、SVG → rsvg-convert → JPEG）。`python3 templates/carousel.py posts/<フォルダ>`。中身はスクリプトの中の文を書き換える
+| ファイル | サイズ | 使う場所 |
+|---|---|---|
+| brand.css | | 色・書体・キッカー・ロゴの土台。全部のテンプレートが読む |
+| note_eyecatch.html | 1280×670（2倍で書き出し） | note のアイキャッチ |
+| note_compare.html | 1280×960（2倍） | note の記事内の比較図 |
+| ig_explainer.html | 1080×1350×5枚 | Instagram 解説型カルーセル（表紙＝結論、西、伊、ちがい、まとめ＋note） |
+| ig_result.html | 1080×1350 | Instagram 結果型（1位だけ大きく、2〜10位は同じ行） |
+| cover_1920.html | 1080×1920 | リール・TikTok のカバー（`?guide` で安全な範囲を表示） |
+| x_image.html | 1600×900 | X・Threads の添付画像 |
+| note_book_card.html | 1280×670（2倍） | note「この回の一冊」（旧デザインの色のまま） |
+| old/ | | 旧デザイン（濃紺 #0B1220・黄 #F5B700）。note_header_v1.html、carousel_v1.py |
 
-撮り方（Playwright）：
-```python
-from playwright.sync_api import sync_playwright
-with sync_playwright() as p:
-    b=p.chromium.launch();pg=b.new_page(viewport={'width':1280,'height':670},device_scale_factor=2)
-    pg.goto('file:///…/templates/note_header.html');pg.wait_for_timeout(500)
-    pg.screenshot(path='out.png');b.close()
+書き出し：
 ```
+python3 templates/render.py templates/note_eyecatch.html out/eyecatch.png
+python3 templates/render.py templates/ig_explainer.html posts/<フォルダ>     # c1.jpg〜c5.jpg
+python3 templates/render.py templates/x_image.html out/x.jpg
+```
+
+- 書体の Dela Gothic One と Anton は、いまの作業環境に入っていない。入るまでは Noto Sans JP Black と Inter Display で代わりに表示される。フォントのファイル（どちらも OFL）を templates/fonts/ に置けば、brand.css に @font-face を足して使える
+- 運営者が Canva で作るときも、色・左右・キッカー・サイズはこの表と CLAUDE.md の13に合わせる

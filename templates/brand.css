@@ -1,0 +1,29 @@
+/* Eurogrid デザインの土台（2026-11-11、デザイン強化の調査の提案値で開始。実戦で微調整） */
+:root{
+  --ink:#0B0D10;          /* 土台色。背景は固定 */
+  --es:#D5001C;           /* スペイン主色 */
+  --es2:#FFB800;          /* スペイン副色 */
+  --it:#005DAA;           /* イタリア主色（アッズーリ） */
+  --it-stripe:#008C45;    /* イタリアの緑。細いストライプにだけ使う */
+  --text:#F2EEE6;         /* 文字（決まっていないので従来のオフホワイトのまま） */
+  --sub:#9AA3B2;          /* 補足の文字（従来どおり） */
+  --line:rgba(255,255,255,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--ink);color:var(--text);font-family:"Noto Sans JP","Noto Sans CJK JP",sans-serif;overflow:hidden}
+/* 見出し：Dela Gothic One が入っていればそれ、なければ Noto Sans JP Black 900 */
+.h{font-family:"Dela Gothic One","Noto Sans JP","Noto Sans CJK JP",sans-serif;font-weight:900;line-height:1.2}
+/* 数字：Anton が入っていればそれ（いまの作業環境には未導入。入るまでは Inter Display の Black で代用） */
+.num{font-family:Anton,"Inter Display",Inter,sans-serif;font-weight:900;letter-spacing:.01em;font-variant-numeric:tabular-nums}
+/* キッカー：速報／比較／解説／結果 の4つだけ。全画像で同じ位置（左上） */
+.kicker{position:absolute;left:var(--pad);top:var(--pad);display:inline-flex;align-items:center;gap:.5em;padding:.35em .8em;border:2px solid var(--text);font-weight:900;letter-spacing:.2em;font-size:var(--k,26px);line-height:1}
+.kicker[data-k="速報"]{background:var(--es);border-color:var(--es)}
+.kicker[data-k="結果"]{background:var(--text);color:var(--ink);border-color:var(--text)}
+/* 左＝スペイン、右＝イタリア（全テンプレートで固定） */
+.side-es{color:var(--es)} .side-it{color:var(--it)}
+.bar-es{background:linear-gradient(90deg,var(--es) 0 78%,var(--es2) 78%)}
+.bar-it{background:linear-gradient(90deg,var(--it-stripe) 0 6%,var(--it) 6%)}
+.logo{display:flex;align-items:center;gap:.5em;font-family:Inter,sans-serif;font-weight:700}
+.logo .mark{display:flex;gap:.2em}.logo .mark i{display:block;width:.8em;height:.95em;border:.2em solid var(--text);border-bottom:none}
+.logo .mark i+i{border-color:var(--es2);margin-top:.25em}
+.handle{font-family:Inter,sans-serif;color:var(--sub)}

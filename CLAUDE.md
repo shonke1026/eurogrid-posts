@@ -10,7 +10,7 @@
 - スペインとイタリアのMotoGP報道を読み比べて、日本語で届ける非公式アカウント。全SNS @eurogrid_jp（note は https://note.com/eurogrid_jp）
 - キャッチコピー：「ふたつの視点、ひとつのグリッド。」
 - 迷ったら：すでに詳しいファンだけでなく、これからMotoGPを知る人にも伝わるか
-- ブランド色：濃紺 #0B1220（note は #0d1522）、オフホワイト #F2EEE6、黄色 #F5B700（note は #f5b301）。グリッドの枠がモチーフ。チームカラーに寄せない
+- 見た目の決まりは 13（デザイン）
 - 案内役：ルシア（スペイン側）とマッテオ（イタリア側）。架空のキャラ。セリフは記事の要約だけ（Project の 10_character_brief.md）
 - 説明では「新聞」でなく「報道」と書く（スポーツ紙・専門誌・ニュースサイト・放送局があるため）
 
@@ -118,6 +118,28 @@
 
 ## 12. 置き場所
 - posts/：投稿（post.json と画像・動画）。書き方は platforms/
-- templates/：画像の型。assets/：ヘッダーなどの元データ
+- templates/：画像の型（brand.css、各テンプレート、render.py。旧版は templates/old/）。assets/：ヘッダーなどの元データ
 - scripts/publish.py：Instagram・Threads の自動投稿。scripts/check_post.py：auditor が使う機械チェック
 - Project（claude.ai「SNS」）に残すもの：コンセプトの経緯（01）、情報源（02）、コメントの扱い（06）、企画（07・15〜18）、キャラ（10）、動画と声（11）、OKの流れと定期タスク（12）、ミスの記録（14）、本棚とアソシエイト（19・21）、毎日の案（daily/）、振り返り（reviews/）
+
+## 13. デザイン（2026-11-11、デザイン強化の調査の提案値で開始。実戦で微調整）
+- 写真は使わない前提で作る（報道写真は非公式アカウントでは使えない）。主役は文字（タイポグラフィ）、色面の対決、データの図、自作のシルエットや線画。公式投稿の埋め込み・シェアは別枠
+- 強い媒体に学ぶのは写真でなく「型」：順位表は1位だけ大きく2〜10位は同じ行、結果は3分割、連載名と分類ラベルを固定
+- 色（templates/brand.css が正本）
+  - 土台：インク #0B0D10（背景は固定）
+  - スペイン：#D5001C ＋ #FFB800
+  - イタリア：主色はアッズーリの青 #005DAA。緑 #008C45 は細いストライプだけ（両国とも赤を持つので、イタリアの主色を赤・緑にしない）
+  - 文字の色、ロゴ（白と黄色のコの字）は決まっていないので、いまのまま（オフホワイト #F2EEE6、黄はスペインの #FFB800 と同じ色で表示）
+- 配置：左＝スペイン、右＝イタリア。全部のテンプレートで固定
+- 書体：見出し Dela Gothic One または Noto Sans JP Black 900、数字 Anton、本文 Noto Sans JP（Dela Gothic One と Anton は Claude の作業環境にまだ入っていない。入るまでは Noto Sans JP Black と Inter Display で代わりに表示）
+- キッカー（分類ラベル）：「速報」「比較」「解説」「結果」の4つだけ。全部の画像で左上の同じ位置に付ける
+- 国旗の絵文字は画像の中で使わない（2）
+- サイズ：note アイキャッチ 1280×670、note 記事内の比較図 1280×960、Instagram カルーセル 1080×1350、リール・TikTok のカバー 1080×1920、X・Threads の添付画像 1600×900。媒体ごとの使い方は platforms/
+- 作り方
+  - Claude：templates/ の HTML（brand.css）から templates/render.py で書き出す
+  - 運営者が手で作るとき：マスターは Canva に一本化（ブランドキット、背景リムーバ、一括作成）。Figma は無料のまま第2候補（使うなら Google Sheets Sync、Iconify、Unsplash）。CapCut は無料の範囲で自動字幕とカバー
+  - 投稿画面（note、Instagram、X、Threads、TikTok）にデザイン用のプラグインはない。note と Canva の連携は 2025-12-01 に終わっている
+  - やらない：Figma 有料への早めの課金、remove.bg への課金、Adobe CC、素材サイトへの課金、プラグインの大量導入
+  - Canva Pro（月1,180円／年11,800円）にするかは運営者が決める
+- まだ確かめていないので決めないこと：GPOne・Marca の投稿デザインの細かい検証、CapCut Pro の日本円の公式価格、Canva の Upscale がどのプランで使えるか
+- 調査の全文：https://muse.ai/s/eurogriddezainqiang-hua-risati-xsn6xbibzxebxty/fVb6dWbYqUSCLatFxWhbKCm-jgJP3VA6Th6PmlV1kDg

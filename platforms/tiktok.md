@@ -11,6 +11,7 @@
 - https://www.tiktok.com/tiktokstudio/upload から上げる。公開ボタンは運営者のOKのあと
 - 動画は10MB未満で書き出す（45秒なら映像1.5Mbps前後）
 - ファイルの入れ方は note と同じ（assets/ か posts/ に push → raw.githubusercontent.com から fetch → input に DataTransfer）
+- カバーは Instagram のリールと同じ 1080×1920（templates/cover_1920.html。真ん中 1080×1350 の内側に大事な情報、下の3分の1と右下は空ける）
 - キャプション：Instagram と同じ本文から。ハッシュタグ3〜5個（#MotoGP #モトGP #バイクレース ＋話題の1つ）。「PRではありません」
 
 ## フォロー（2026-11-10、運営者の指示「あなたが毎日やって」）
