@@ -33,7 +33,7 @@
   - カルーセル：`{"publish_at":"…+09:00","approved":true,"caption":"…","images":["c1.jpg","c2.jpg",…]}`（JPEGのみ）
   - リール：`"video":"reel.mp4"`（表紙は `"cover":"cover.jpg"`）。フィードにも出る
   - ストーリーズ：`{"story":true,"publish_at":…,"approved":true,"images":[…]}`（1080×1920、scripts/story_cards.py）
-- 出し方・遅れたときの手動実行は platforms/threads.md と同じ（publish.yml）
+- 出し方・遅れたときの手動実行は platforms/threads.md と同じ（publish.yml）。予約の1分後に手動実行するリマインダーも毎回入れる（自動実行は40〜60分遅れるため。2026-11-11 運営者OKの Threads と同じやり方）
 - プロフィールのリンクの編集はスマホのアプリからだけ（運営者）。いまは note が1本目
 
 ## Amazon
