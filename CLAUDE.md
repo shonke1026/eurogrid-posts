@@ -104,6 +104,15 @@
 | Massimo Rivola | マッシモ・リボラ | アプリリアの代表 |
 | Fermín Aldeguer | フェルミン・アルデゲール | |
 | Ángel Charte | アンヘル・チャルテ | MotoGPのメディカルディレクター |
+| Maverick Viñales | マーベリック・ビニャーレス | |
+| Davide Tardozzi | ダビデ・タルドッツィ | ドゥカティのチームマネージャー（呼ぶときは「タルドッツィさん」など役職か「さん」） |
+| Manuel González | マヌエル・ゴンサレス | Moto2 |
+| Izan Guevara | イサン・ゲバラ | Moto2 |
+| Alex de Angelis | アレックス・デ・アンジェリス | Moto2 のチームマネージャー（「さん」） |
+| Diogo Moreira | ディオゴ・モレイラ | |
+| Ignacio Rivera | イグナシオ・リベラ | Hijos de Rivera の会長（「さん」） |
+| Enea Bastianini | エネア・バスティアニーニ | |
+| Johann Zarco | ヨハン・ザルコ | |
 
 - 用語：FP＝フリー走行、Q1/Q2＝予選、Sprint＝スプリント、Long lap penalty＝ロングラップペナルティ
 - 表にない名前が出たら、決めた表記をこの表に足す
