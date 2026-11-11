@@ -5,6 +5,10 @@
 - URL：https://www.facebook.com/eurogridjp （ユーザーネームにアンダーバーが使えないので eurogridjp）
 - アイコン：templates/icon.html、カバー：templates/fb_cover.html（1640×624。スマホでは左右が切れるので中身は真ん中に）
 - Instagram の @eurogrid_jp とリンク済み（2026-11-12）
+- リンク：note（https://note.com/eurogrid_jp 、表示は「note」）を 2026-11-12 に追加。出口はほかの媒体と同じく note にそろえる（運営者）
+- 自己紹介・表示名は今のまま（2026-11-12 運営者）
+- 未確認：アカウントセンターでの連携と、Instagram のリールを Facebook に同時に出す設定。個人のアカウントへの切り替えが要るので運営者が確かめる（2026-11-12）
+- 位置づけ（名前の確保だけか、リール転載のテストか）は運営者がこれから決める。決まったらこのファイルとグランドデザインを直す
 - まだ確かめていないこと：自動投稿（scripts/publish.py の API）で出した Instagram の投稿が Facebook のページにも流れるか。次の Instagram の投稿のあとにページを見て確かめる
 - 調査：日本のファンのグループ「MotoGP ファン」（https://www.facebook.com/groups/393458810818731 、公開、約1.2万人）に、Eurogrid のページとして参加済み（2026-11-12）。Eurogrid 用の Chrome でフィードが読めることを確かめた。researcher.md の手順で毎朝読む。画面に「Eurogrid…としてコメント」の欄が出るが、いいね・コメント・投稿は Claude がしない（グループに書くかは運営者が決める）
 - パスワードの再入力・ログインは運営者がする
