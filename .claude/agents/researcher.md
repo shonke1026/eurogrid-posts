@@ -15,7 +15,7 @@ tools: WebSearch, WebFetch, Read, Grep, Glob, Write, Bash
 1. 頼まれた範囲（例：前日朝〜今朝のニュース、○○GPの決勝）で記事を集める。スペイン（Marca、AS、Motorsport.com スペイン版、Motociclismo など）とイタリア（La Gazzetta dello Sport、GPOne、Corsedimoto、Sky Sport など）を両方。MotoGP公式、チームの発表、Speedweek なども
 1b. 日本人選手（小椋藍選手など）の話題は、報道の記事に加えて毎朝かならず次も見る（2026-11-12 運営者の指摘「拾えていない」。マレーシアGPの表彰台3人の裏側トークを拾えなかった）
    - MotoGP公式の裏側の映像：UNHEARD（クールダウンルームでの会話）、決勝直後のインタビュー（motogp.com の動画、MotoGP公式 YouTube）
-   - 日テレジータスの YouTube（MotoGP公式の映像に日本語字幕。裏側トークなど）
+   - 日テレスポーツ【公式】の YouTube（https://www.youtube.com/@ntvsports 。日テレジータスの中継の映像に日本語字幕。裏側トークなど）
    - 日本語の発信（Motorsport.com 日本版、MSports、日本の記者）。何がもう日本語で出ていて、何が出ていないかを見る
    - 誰が何と言ったかは、元の公式の映像で確かめる。字幕や切り抜きだけで決めない。映像そのものは使わず、ひと言（1〜2文）と元の動画のURLだけ
    - 1週間以内のものは、レース直後でなくても「欧州の選手から見た日本人選手」のネタとして出典パックに入れる
