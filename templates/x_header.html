@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="brand.css"><style>
+/* X のヘッダー 1500×500。左下はアイコンに隠れるので、文字は左上〜中央に置く */
+body{width:1500px;height:500px;position:relative}
+.t{position:absolute;left:100px;top:92px}
+.name{font-family:Inter,sans-serif;font-weight:800;font-size:118px;line-height:1;letter-spacing:-.01em}
+.tag{margin-top:26px;font-family:Inter,sans-serif;font-weight:700;font-size:28px;letter-spacing:.3em;color:var(--logo-l)}
+.copy{margin-top:18px;font-size:30px;color:var(--sub);font-weight:500}
+.g{position:absolute;left:695px;top:120px;display:grid;grid-template-columns:repeat(5,100px);column-gap:60px;row-gap:90px}
+.g i{display:block;width:100px;height:90px;border:10px solid #3A3F47;border-bottom:none}
+.g i:nth-child(5n+2),.g i:nth-child(5n+4){transform:translateY(60px)}
+.g i.l{border-color:var(--logo-l)} .g i.r{border-color:var(--logo-r)}
+.bars{position:absolute;left:0;right:0;bottom:0;height:8px;display:flex}.bars .es{flex:1;background:linear-gradient(90deg,var(--es) 0 78%,var(--es2) 78%)}.bars .it{flex:1;background:linear-gradient(90deg,var(--it-stripe) 0 6%,var(--it) 6%)}
+</style></head><body>
+<div class="t"><div class="name">Eurogrid</div><div class="tag">ES · IT → JP</div><div class="copy">ふたつの視点、ひとつのグリッド。</div></div>
+<div class="g"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="l"></i><i class="r"></i><i></i></div>
+<div class="bars"><div class="es"></div><div class="it"></div></div>
+</body></html>
