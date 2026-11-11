@@ -146,7 +146,7 @@
   - ロゴのコの字：左＝シャンパンゴールド #C8A96A、右＝シルバー #C3C8D0（2026-11-11 運営者。どちらの国の色でもない色にした）
   - 文字の色は決まっていないので、いまのまま（オフホワイト #F2EEE6）
 - 配置：左＝スペイン、右＝イタリア。全部のテンプレートで固定
-- 書体：見出し Dela Gothic One または Noto Sans JP Black 900、数字 Anton、本文 Noto Sans JP（Dela Gothic One と Anton は Claude の作業環境にまだ入っていない。入るまでは Noto Sans JP Black と Inter Display で代わりに表示）
+- 書体：見出し Dela Gothic One または Noto Sans JP Black 900、数字 Anton、本文 Noto Sans JP（Dela Gothic One と Anton のファイルは templates/fonts/ にあり、brand.css から読む。どちらも SIL Open Font License で無料。2026-11-11 入れた）
 - キッカー（分類ラベル）：「速報」「比較」「解説」「結果」の4つだけ。全部の画像で左上の同じ位置に付ける
 - 国旗の絵文字は画像の中で使わない（2）
 - サイズ：note アイキャッチ 1280×670、note 記事内の比較図 1280×960、Instagram カルーセル 1080×1350、リール・TikTok のカバー 1080×1920、X・Threads の添付画像 1600×900。媒体ごとの使い方は platforms/
