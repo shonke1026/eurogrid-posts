@@ -27,7 +27,7 @@ import urllib.parse
 import urllib.request
 
 API = "https://graph.facebook.com/v23.0"
-IG_USER_ID = os.environ.get("IG_USER_ID", "")  # empty: looked up from the token (ig_user_id())
+IG_USER_ID = os.environ.get("IG_USER_ID", "17841466770737433")
 REPO = os.environ.get("GITHUB_REPOSITORY", "shonke1026/eurogrid-posts")
 BRANCH = os.environ.get("GITHUB_REF_NAME", "main")
 TOKEN = os.environ.get("IG_ACCESS_TOKEN", "")
@@ -52,19 +52,6 @@ def call(method, path, base=None, token=None, **params):
     except urllib.error.HTTPError as e:
         body = e.read().decode(errors="replace").replace(token, "***")
         raise SystemExit(f"API error {e.code} on {path}: {body}")
-
-
-def ig_user_id():
-    """Instagram account ID. Not written in this public repo: taken from the IG_USER_ID
-    secret if set, otherwise looked up from the token's Facebook page."""
-    global IG_USER_ID
-    if not IG_USER_ID:
-        pages = call("GET", "me/accounts", fields="instagram_business_account").get("data", [])
-        ids = [p["instagram_business_account"]["id"] for p in pages if p.get("instagram_business_account")]
-        if len(ids) != 1:
-            raise SystemExit(f"could not find exactly one Instagram account for the token (found {len(ids)})")
-        IG_USER_ID = ids[0]
-    return IG_USER_ID
 
 
 def wait_ready(cid, tries=30):
@@ -167,13 +154,13 @@ def publish_reel(folder, post):
         print(f"[dry-run] would publish reel {folder}: {raw_url(folder, v)}")
         return None
     extra = {"cover_url": raw_url(folder, post["cover"])} if post.get("cover") else {}
-    cid = call("POST", f"{ig_user_id()}/media", media_type="REELS", video_url=raw_url(folder, v),
+    cid = call("POST", f"{IG_USER_ID}/media", media_type="REELS", video_url=raw_url(folder, v),
                caption=post["caption"], share_to_feed="true", **extra)["id"]
     wait_ready(cid, tries=72)
     if CHECK:
         print(f"[check] Instagram reel container {cid} is ready (not published)")
         return None
-    mid = call("POST", f"{ig_user_id()}/media_publish", creation_id=cid)["id"]
+    mid = call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"]
     record(mid)
     return mid
 
@@ -190,17 +177,17 @@ def publish_story(folder, post):
     ids = []
     for n in files:
         if n.lower().endswith(".mp4"):
-            cid = call("POST", f"{ig_user_id()}/media", media_type="STORIES", video_url=raw_url(folder, n))["id"]
+            cid = call("POST", f"{IG_USER_ID}/media", media_type="STORIES", video_url=raw_url(folder, n))["id"]
             wait_ready(cid, tries=72)
         else:
             if not n.lower().endswith((".jpg", ".jpeg")):
                 raise SystemExit(f"{folder}/{n}: Instagram accepts JPEG only")
-            cid = call("POST", f"{ig_user_id()}/media", media_type="STORIES", image_url=raw_url(folder, n))["id"]
+            cid = call("POST", f"{IG_USER_ID}/media", media_type="STORIES", image_url=raw_url(folder, n))["id"]
             wait_ready(cid)
         if CHECK:
             print(f"[check] story container {cid} for {n} is ready (not published)")
             continue
-        ids.append(call("POST", f"{ig_user_id()}/media_publish", creation_id=cid)["id"])
+        ids.append(call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"])
         record(",".join(ids), frames_published=len(ids))
         time.sleep(3)
     return ",".join(ids) if ids else None
@@ -223,16 +210,16 @@ def publish(folder, post):
             print("   ", raw_url(folder, n))
         return None
     if len(imgs) == 1:
-        cid = call("POST", f"{ig_user_id()}/media", image_url=raw_url(folder, imgs[0]), caption=post["caption"])["id"]
+        cid = call("POST", f"{IG_USER_ID}/media", image_url=raw_url(folder, imgs[0]), caption=post["caption"])["id"]
     else:
         children = []
         for n in imgs:
-            c = call("POST", f"{ig_user_id()}/media", image_url=raw_url(folder, n), is_carousel_item="true")["id"]
+            c = call("POST", f"{IG_USER_ID}/media", image_url=raw_url(folder, n), is_carousel_item="true")["id"]
             wait_ready(c)
             children.append(c)
-        cid = call("POST", f"{ig_user_id()}/media", media_type="CAROUSEL", children=",".join(children), caption=post["caption"])["id"]
+        cid = call("POST", f"{IG_USER_ID}/media", media_type="CAROUSEL", children=",".join(children), caption=post["caption"])["id"]
     wait_ready(cid)
-    mid = call("POST", f"{ig_user_id()}/media_publish", creation_id=cid)["id"]
+    mid = call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"]
     record(mid)
     return mid
 
