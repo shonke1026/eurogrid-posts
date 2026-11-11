@@ -13,7 +13,9 @@ Threads VIDEO). Optional for Instagram: "cover": "cover.jpg".
 `python3 scripts/publish.py --check <folder>` only creates the media containers and
 waits until Meta has processed them (nothing is published; containers expire in 24h).
 A post is published when approved is true, publish_at has passed and
-published.json does not exist yet. published.json is written afterwards.
+published.json does not exist yet. published.json is written right after the main post
+is published (before any reply), so a failed reply never makes the main post go out twice.
+A reply failure is recorded as "reply_error" in published.json and does not stop the run.
 """
 import datetime as dt
 import json
@@ -83,6 +85,18 @@ def th_wait(cid, tries=60):
 
 
 CHECK = False
+CURRENT_OUT = None  # posts/<folder>/published.json of the post being published
+
+
+def record(media_id, **extra):
+    """Write published.json as soon as the main post is live (time = actual publish time)."""
+    if CURRENT_OUT is None or not media_id:
+        return
+    data = json.loads(CURRENT_OUT.read_text()) if CURRENT_OUT.exists() else {}
+    data.setdefault("media_id", media_id)
+    data.setdefault("published_at", dt.datetime.now(dt.timezone.utc).isoformat())
+    data.update(extra)
+    CURRENT_OUT.write_text(json.dumps(data, ensure_ascii=False, indent=2))
 
 
 def publish_threads(folder, post):
@@ -113,17 +127,22 @@ def publish_threads(folder, post):
     if not post.get("video"):
         time.sleep(30 if imgs else 10)
     mid = th("POST", "me/threads_publish", creation_id=cid)["id"]
-    if post.get("reply"):
-        time.sleep(5)
-        rid = th("POST", "me/threads", media_type="TEXT", text=post["reply"], reply_to_id=mid)["id"]
-        time.sleep(10)
-        prev = th("POST", "me/threads_publish", creation_id=rid)["id"]
-        # "replies": extra replies, each posted under the previous reply (e.g. sources 2/2)
-        for extra_text in post.get("replies", []):
+    record(mid)
+    texts = ([post["reply"]] if post.get("reply") else []) + list(post.get("replies", []))
+    prev, reply_ids = mid, []
+    # "replies": extra replies, each posted under the previous reply (e.g. sources 2/2)
+    for n, text in enumerate(texts, 1):
+        try:
             time.sleep(5)
-            rid = th("POST", "me/threads", media_type="TEXT", text=extra_text, reply_to_id=prev)["id"]
+            rid = th("POST", "me/threads", media_type="TEXT", text=text, reply_to_id=prev)["id"]
             time.sleep(10)
             prev = th("POST", "me/threads_publish", creation_id=rid)["id"]
+            reply_ids.append(prev)
+            record(mid, reply_ids=reply_ids)
+        except (Exception, SystemExit) as e:
+            print(f"reply {n} failed for {folder}: {e}")
+            record(mid, reply_ids=reply_ids, reply_error=f"reply {n}: {e}")
+            break
     return mid
 
 
@@ -141,7 +160,9 @@ def publish_reel(folder, post):
     if CHECK:
         print(f"[check] Instagram reel container {cid} is ready (not published)")
         return None
-    return call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"]
+    mid = call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"]
+    record(mid)
+    return mid
 
 
 def publish_story(folder, post):
@@ -167,6 +188,7 @@ def publish_story(folder, post):
             print(f"[check] story container {cid} for {n} is ready (not published)")
             continue
         ids.append(call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"])
+        record(",".join(ids), frames_published=len(ids))
         time.sleep(3)
     return ",".join(ids) if ids else None
 
@@ -197,11 +219,13 @@ def publish(folder, post):
             children.append(c)
         cid = call("POST", f"{IG_USER_ID}/media", media_type="CAROUSEL", children=",".join(children), caption=post["caption"])["id"]
     wait_ready(cid)
-    return call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"]
+    mid = call("POST", f"{IG_USER_ID}/media_publish", creation_id=cid)["id"]
+    record(mid)
+    return mid
 
 
 def main():
-    global CHECK
+    global CHECK, CURRENT_OUT
     if len(sys.argv) == 3 and sys.argv[1] == "--check":
         CHECK = True
         d = ROOT / sys.argv[2]
@@ -213,6 +237,7 @@ def main():
         sys.exit("no access token is set")
     now = dt.datetime.now(dt.timezone.utc)
     done = 0
+    failed = []
     for d in sorted(p for p in ROOT.iterdir() if p.is_dir()):
         meta, out = d / "post.json", d / "published.json"
         if not meta.exists() or out.exists():
@@ -225,12 +250,27 @@ def main():
         if when > now:
             print(f"wait {d.name}: scheduled {post['publish_at']}")
             continue
-        media_id = publish(d.name, post)
+        CURRENT_OUT = out
+        try:
+            media_id = publish(d.name, post)
+        except (Exception, SystemExit) as e:
+            # main post failed (or a story frame): keep going with the other posts
+            print(f"FAILED {d.name}: {e}")
+            failed.append(d.name)
+            continue
+        finally:
+            CURRENT_OUT = None
         if media_id:
-            out.write_text(json.dumps({"media_id": media_id, "published_at": now.isoformat()}, ensure_ascii=False, indent=2))
-            print(f"published {d.name}: media {media_id}")
+            record_out = json.loads(out.read_text()) if out.exists() else {}
+            if not record_out:
+                out.write_text(json.dumps({"media_id": media_id, "published_at": dt.datetime.now(dt.timezone.utc).isoformat()}, ensure_ascii=False, indent=2))
+            print(f"published {d.name}: media {media_id}" + (f" (reply error: {record_out['reply_error']})" if record_out.get("reply_error") else ""))
             done += 1
+            if record_out.get("reply_error"):
+                failed.append(d.name + " (reply)")
     print(f"done: {done} post(s) published")
+    if failed:
+        sys.exit("failed: " + ", ".join(failed))
 
 
 if __name__ == "__main__":

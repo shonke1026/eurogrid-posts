@@ -29,8 +29,9 @@ jobs:
         run: |
           if [ -n "$CHECK_FOLDER" ]; then python3 scripts/publish.py --check "$CHECK_FOLDER"; else python3 scripts/publish.py; fi
       - name: Record published posts
+        if: always()
         run: |
           git config user.name "eurogrid-bot"
           git config user.email "eurogrid-bot@users.noreply.github.com"
           git add posts
-          git diff --cached --quiet || (git commit -m "Record published posts" && git push)
+          git diff --cached --quiet || (git commit -m "Record published posts" && (git push || (git pull --rebase && git push)))
