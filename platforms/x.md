@@ -31,6 +31,7 @@
 - キーボード入力（type）は日本語の順番が崩れるので使わない
 - x.com のタブで javascript_tool から `location.href='https://x.com/intent/post?text='+encodeURIComponent(本文)`（返信は `in_reply_to=ID&` を足す）
 - URL入りのときは、intent のページが開いたら入力欄の最後にカーソルを置き、execCommand('insertText',false,' ') で空白を1つ入れる（入力したことになり、カードが読み込まれる。intent で入れただけだとカードを読み込まないまま送れてしまい、投稿のあとにカードが付く）。そのあと2秒おきに15回「カードプレビューを削除」ボタンを探して押す。ボタンが一度も出ないとき・入力欄にカードが残っているときは送らずに止めて運営者に知らせる（11/11 に3回カードが付いて決めた）
+  - 例外：自分の Threads の投稿へのリンクは削除ボタンが出ないことがあるが、付くのは写真なしの文字だけのカード（「Eurogrid (@eurogrid_jp) on Threads」）なので、そのまま出してよい（2026-11-11 運営者OK）
 - data-testid="tweetButton" の aria-disabled が "true" でないことを確かめてから押す
 - x.com/eurogrid_jp で最新の /status/数字 を取り、返信に使う。出したあと、投稿のページでカードが付いていないか見る
 - OKのあと続けて出さず、1本ごとに3〜10分（毎回ちがう長さ）あける
