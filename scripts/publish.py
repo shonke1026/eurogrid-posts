@@ -61,6 +61,10 @@ def ig_user_id():
     if not IG_USER_ID:
         pages = call("GET", "me/accounts", fields="instagram_business_account").get("data", [])
         ids = [p["instagram_business_account"]["id"] for p in pages if p.get("instagram_business_account")]
+        if not ids:  # system user token: the Instagram account is in the token's granular scopes
+            info = call("GET", "debug_token", input_token=TOKEN).get("data", {})
+            ids = sorted({i for g in info.get("granular_scopes", []) if g.get("scope", "").startswith("instagram_")
+                          for i in g.get("target_ids", [])})
         if len(ids) != 1:
             raise SystemExit(f"could not find exactly one Instagram account for the token (found {len(ids)})")
         IG_USER_ID = ids[0]
