@@ -30,6 +30,7 @@
 - posts/<日付-名前>/post.json を作り、OKのあと main に push
   - 通常：`{"platform":"threads","publish_at":"…+09:00","approved":true,"text":"本文","topic_tag":"MotoGP","reply":"出典\n媒体名 URL"}`
   - 画像：`"images":["1.jpg",…]` を足す。動画：`"video":"reel.mp4"`
+  - 返信を2つ以上つなぐ：`"replies":["2つ目の返信",…]`（それぞれ前の返信の下に付く。2026-11-12 追加）
   - 既存の投稿の下に返信だけ：`"reply_to_id":"<media id>"` と `"text"`（topic_tag は付かない）
 - GitHub Actions が15分ごとに出す。遅れることがあるので、予約から20分たっても published.json がなければ手動で実行：
   `gh api -X POST repos/shonke1026/eurogrid-posts/actions/workflows/publish.yml/dispatches -f ref=main -f 'inputs[dry_run]=0'`

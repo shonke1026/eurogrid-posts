@@ -117,7 +117,13 @@ def publish_threads(folder, post):
         time.sleep(5)
         rid = th("POST", "me/threads", media_type="TEXT", text=post["reply"], reply_to_id=mid)["id"]
         time.sleep(10)
-        th("POST", "me/threads_publish", creation_id=rid)
+        prev = th("POST", "me/threads_publish", creation_id=rid)["id"]
+        # "replies": extra replies, each posted under the previous reply (e.g. sources 2/2)
+        for extra_text in post.get("replies", []):
+            time.sleep(5)
+            rid = th("POST", "me/threads", media_type="TEXT", text=extra_text, reply_to_id=prev)["id"]
+            time.sleep(10)
+            prev = th("POST", "me/threads_publish", creation_id=rid)["id"]
     return mid
 
 
