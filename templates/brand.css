@@ -7,6 +7,8 @@
   --it-stripe:#008C45;    /* イタリアの緑。細いストライプにだけ使う */
   --text:#F2EEE6;         /* 文字（決まっていないので従来のオフホワイトのまま） */
   --sub:#9AA3B2;          /* 補足の文字（従来どおり） */
+  --logo-l:#C8A96A;       /* ロゴ左のコの字：シャンパンゴールド（2026-11-11 運営者） */
+  --logo-r:#C3C8D0;       /* ロゴ右のコの字：シルバー（同上） */
   --line:rgba(255,255,255,.08);
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -24,6 +26,6 @@ body{background:var(--ink);color:var(--text);font-family:"Noto Sans JP","Noto Sa
 .bar-es{background:linear-gradient(90deg,var(--es) 0 78%,var(--es2) 78%)}
 .bar-it{background:linear-gradient(90deg,var(--it-stripe) 0 6%,var(--it) 6%)}
 .logo{display:flex;align-items:center;gap:.5em;font-family:Inter,sans-serif;font-weight:700}
-.logo .mark{display:flex;gap:.2em}.logo .mark i{display:block;width:.8em;height:.95em;border:.2em solid var(--text);border-bottom:none}
-.logo .mark i+i{border-color:var(--es2);margin-top:.25em}
+.logo .mark{display:flex;gap:.2em}.logo .mark i{display:block;width:.8em;height:.95em;border:.2em solid var(--logo-l);border-bottom:none}
+.logo .mark i+i{border-color:var(--logo-r);margin-top:.25em}
 .handle{font-family:Inter,sans-serif;color:var(--sub)}
