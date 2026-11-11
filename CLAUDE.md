@@ -5,6 +5,7 @@
 旧資料：archive/03_style_guide.md、archive/04_templates_workflow.md（2026-11-11 までの版。もう直さない）。
 
 このリポジトリは公開。メールアドレス、鍵（トークン）、アカウントの内部ID、OK前の投稿案は書かない・push しない。
+- 例外：scripts/publish.py と .github/workflows/refresh-token.yml の Instagram の内部ID（IG_USER_ID の初期値）はそのまま残す（2026-11-12 運営者。Secrets にはこの環境から登録できず、トークンからも引けなかった）。新しく書き足すのはだめ
 
 ## 1. Eurogrid とは
 - スペインとイタリアのMotoGP報道を読み比べて、日本語で届ける非公式アカウント。全SNS @eurogrid_jp（note は https://note.com/eurogrid_jp）
