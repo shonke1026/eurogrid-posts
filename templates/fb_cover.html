@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="brand.css"><style>
+/* Facebook ページのカバー 1640×624（820×312 の2倍）。スマホでは左右が切れるので、中身は真ん中の 1280 幅に入れる。左下はアイコンに重なることがあるので空ける */
+body{width:1640px;height:624px;position:relative}
+.t{position:absolute;left:220px;top:150px}
+.name{font-family:Inter,sans-serif;font-weight:800;font-size:132px;line-height:1;letter-spacing:-.01em}
+.tag{margin-top:30px;font-family:Inter,sans-serif;font-weight:700;font-size:30px;letter-spacing:.3em;color:var(--logo-l)}
+.copy{margin-top:20px;font-size:34px;color:var(--sub);font-weight:500}
+.g{position:absolute;left:880px;top:150px;display:grid;grid-template-columns:repeat(4,110px);column-gap:66px;row-gap:96px}
+.g i{display:block;width:110px;height:100px;border:11px solid #3A3F47;border-bottom:none}
+.g i:nth-child(4n+2),.g i:nth-child(4n+4){transform:translateY(66px)}
+.g i.l{border-color:var(--logo-l)} .g i.r{border-color:var(--logo-r)}
+.bars{position:absolute;left:0;right:0;bottom:0;height:10px;display:flex}.bars .es{flex:1;background:linear-gradient(90deg,var(--es) 0 78%,var(--es2) 78%)}.bars .it{flex:1;background:linear-gradient(90deg,var(--it-stripe) 0 6%,var(--it) 6%)}
+</style></head><body>
+<div class="t"><div class="name">Eurogrid</div><div class="tag">ES · IT → JP</div><div class="copy">ふたつの視点、ひとつのグリッド。</div></div>
+<div class="g"><i></i><i></i><i></i><i></i><i class="l"></i><i class="r"></i><i></i><i></i></div>
+<div class="bars"><div class="es"></div><div class="it"></div></div>
+</body></html>
