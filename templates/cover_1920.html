@@ -1,5 +1,6 @@
 <!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="brand.css"><style>
 /* リール／TikTok のカバー 1080×1920。大事な情報は中央 1080×1350（上下285px を除く）の内側。下1/3と右下は空ける。
+   載せるのはキッカーと1行のフック（1行10文字まで×2行）だけ。細かい説明は入れない（2026-11-14 デザイン仕様 v1）。
    ?guide を付けて開くと安全な範囲を表示（書き出すときは外す） */
 body{width:1080px;height:1920px;position:relative;--pad:72px}
 .safe{position:absolute;left:0;right:0;top:285px;height:1350px}
@@ -10,7 +11,7 @@ body{width:1080px;height:1920px;position:relative;--pad:72px}
 .guide .safe{outline:4px dashed #0f0}.guide .low{position:absolute;left:0;right:0;bottom:0;height:640px;background:rgba(255,0,0,.15)}
 </style></head><body><div class="safe"></div><div class="low"></div>
 <div class="kicker" data-k="比較">比較</div>
-<div class="t h">見出しは<br>2〜3行まで</div>
+<div class="t h">フックは1行<br>10文字まで</div>
 <div class="vs"><span class="a">スペイン</span><span class="b">イタリア</span></div>
 <div class="logo"><span class="mark"><i></i><i></i></span>Eurogrid</div>
 <script>if(location.search.includes('guide'))document.body.classList.add('guide')</script>
