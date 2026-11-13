@@ -142,16 +142,19 @@
 
 ## 11. 1回分の作り方（担当の流れ）
 1. researcher（.claude/agents/researcher.md）：出典パックを作る。スペイン側・イタリア側の記事、URL、要点、数字
+   - そのあと scout（.claude/agents/scout.md）：researcher とは別に、拾うべき話題を2段階で探す（先に独立して洗い出し、そのあと出典パックと見比べる）。拾い漏れは researcher に戻し、researcher が足すか見送りの理由を書く
 2. formatter（.claude/agents/formatter.md）：このファイルと、その回に出す媒体の platforms/*.md だけを読んで、媒体ごとの案を作る
 3. auditor（.claude/agents/auditor.md）：作った人とは別に、チェックリストで照らし合わせる。だめなら formatter に戻す
 4. メインの会話で運営者に見せて、OKのあと出す
 - 媒体ごとに別々に調べない・要約しない（1つの出典パックから全媒体を作る）
-- 担当エージェントが使えない場所（定期タスクの新しい会話など）では、各 md の手順を順番に自分でやる。ただし auditor は、Agent ツールで別のエージェント（general-purpose）を立て、auditor.md の中身と案を渡してやらせる
+- 監査（auditor：出す案が正しいか）と網羅性（scout：出すべき話題が漏れていないか）は別。どちらの結果も、もう片方の判定に混ぜない（2026-11-12 運営者OK。ユーロ・チャッピーの意見のあと）
+- scout 入りの流れ（1 のあとの scout と2回目の researcher）は決定済みで、毎朝の定期タスクでは指示文を差し替えた日から使う（差し替えは運営者のOKのあと。それまでは 1→2→3）
+- 担当エージェントが使えない場所（定期タスクの新しい会話など）では、各 md の手順を順番に自分でやる。ただし auditor は、Agent ツールで別のエージェント（general-purpose）を立て、auditor.md の中身・案・出典パック・14_mistakes.md の中身だけを渡してやらせる（作った人の説明や前回の監査結果は渡さない）
 
 ## 12. 置き場所
 - posts/：投稿（post.json と画像・動画）。書き方は platforms/
 - templates/：画像の型（brand.css、各テンプレート、render.py。旧版は templates/old/）。assets/：ヘッダーなどの元データ
-- scripts/publish.py：Instagram・Threads の自動投稿。scripts/check_post.py：auditor が使う機械チェック
+- scripts/publish.py：Instagram・Threads の自動投稿。scripts/check_post.py：auditor が使う機械チェック（テストは `python3 -m unittest scripts/test_check_post.py`。check_post.py を変えたら必ず流す）
 - discussions/：ユーロ・Claude・チャッピーの三者協議の置き場所（1議論1ファイル。決まりは discussions/README.md）
 - Project（claude.ai「SNS」）に残すもの：コンセプトの経緯（01）、情報源（02）、コメントの扱い（06）、企画（07・15〜18）、キャラ（10）、動画と声（11）、OKの流れと定期タスク（12）、ミスの記録（14）、本棚とアソシエイト（19・21）、毎日の案（daily/）、振り返り（reviews/）
 
