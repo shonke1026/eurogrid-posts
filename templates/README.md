@@ -5,8 +5,9 @@
 | brand.css | | 色・書体・キッカー・ロゴの土台。全部のテンプレートが読む |
 | note_eyecatch.html | 1280×670（2倍で書き出し） | note のアイキャッチ |
 | note_compare.html | 1280×960（2倍） | note の記事内の比較図 |
-| ig_explainer.html | 1080×1350×5枚 | Instagram 解説型カルーセル（表紙＝結論の一文、西、伊、ちがい、まとめ＋note。帯は全ページ、2・3枚目は引用、4枚目は差分ボックスで下を空けない） |
+| ig_explainer.html | 1080×1350×5枚 | Instagram 解説型カルーセル（デザイン仕様 v1.1：表紙＝結論か対比の一文で色面は下半分以上、帯は全ページの上端、引用は独立した枠、2〜4枚目の末尾に差分の箱、数字帯は Anton。占有率70%以上を check_fill.py で測る） |
 | ig_result.html | 1080×1350 | Instagram 結果型（1位だけ大きく、2〜10位は同じ行） |
+| check_fill.py | | カルーセルの占有率（70%以上）・帯・表紙の色面を測る。`python3 templates/check_fill.py <html>` |
 | cover_1920.html | 1080×1920 | リール・TikTok のカバー（`?guide` で安全な範囲を表示） |
 | x_image.html | 1600×900 | X・Threads の添付画像 |
 | note_book_card.html | 1280×670（2倍） | note「この回の一冊」（旧デザインの色のまま） |
