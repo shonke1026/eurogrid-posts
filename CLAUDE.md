@@ -135,6 +135,18 @@
 | Michele Pirro | ミケーレ・ピッロ | ドゥカティのテストライダー |
 | Iker Lecuona | イケル・レクオナ | |
 | Jorge Viegas | ジョルジ・ビエガス | FIM 会長（「会長」）。ポルトガルの人なのでポルトガル語読み |
+| Stefan Bradl | シュテファン・ブラドル | 元ライダー。「選手」。11/13 の投稿に合わせる |
+| Andrea Dovizioso | アンドレア・ドビツィオーゾ | 引退した元ライダー。「選手」 |
+| Carlos Ezpeleta | カルロス・エスペレータ | MotoGP の幹部（「さん」） |
+| Paolo Pavesio | パオロ・パベシオ | ヤマハ・モーター・レーシングの代表（「代表」か「さん」） |
+| Nicolò Bulega | ニコロ・ブレガ | 2027年に MotoGP へ |
+| Lorenzo Savadori | ロレンツォ・サバドーリ | アプリリアのテストライダー |
+| Pol Espargaró | ポル・エスパルガロ | KTM のテストライダー。兄弟なので名前も付ける |
+| Aleix Espargaró | アレイシ・エスパルガロ | ホンダのテストライダー。兄弟なので名前も付ける |
+| Jonathan Rea | ジョナサン・レイ | SBK |
+| Toprak Razgatlıoğlu | トプラク・ラズガットリオグル | 日本では「トプラク」で通る（2回目から「トプラク選手」でよい） |
+| Jake Dixon | ジェイク・ディクソン | |
+| Joan Mir | ジョアン・ミル | |
 
 - 用語：FP＝フリー走行、Q1/Q2＝予選、Sprint＝スプリント、Long lap penalty＝ロングラップペナルティ
 - 表にない名前が出たら、決めた表記をこの表に足す
