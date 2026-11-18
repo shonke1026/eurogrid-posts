@@ -158,6 +158,8 @@
 | Sete Gibernau | セテ・ジベルナウ | 引退した元ライダー。「選手」 |
 | Guido Meda | グイド・メーダ | Sky Sport イタリアの実況（「さん」） |
 | Masao Azuma | 東雅雄 | 引退した元ライダー。「選手」。2004年からブリヂストンの社員（Honda の WGP 特集） |
+| David Alonso | ダビド・アロンソ | 2027年に LCR ホンダで MotoGP へ |
+| Takaaki Nakagami | 中上貴晶 | ホンダのテストライダー。「選手」 |
 
 - 用語：FP＝フリー走行、Q1/Q2＝予選、Sprint＝スプリント、Long lap penalty＝ロングラップペナルティ
 - 表にない名前が出たら、決めた表記をこの表に足す
