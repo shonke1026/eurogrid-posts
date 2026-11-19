@@ -9,6 +9,7 @@
 
 ## 1. Eurogrid とは
 - スペインとイタリアのMotoGP報道を読み比べて、日本語で届ける非公式アカウント。全SNS @eurogrid_jp（note は https://note.com/eurogrid_jp）
+- 媒体：X、Threads、Instagram、Facebook ページ、note、TikTok、YouTube（https://www.youtube.com/@eurogrid_jp 。2026-11-20 開設、リールの転載だけ）。媒体ごとの決まりは platforms/*.md
 - キャッチコピー：「ふたつの視点、ひとつのグリッド。」
 - 迷ったら：すでに詳しいファンだけでなく、これからMotoGPを知る人にも伝わるか
 - 見た目の決まりは 13（デザイン）
@@ -208,11 +209,11 @@
 - 書体：見出し Dela Gothic One または Noto Sans JP Black 900、数字 Anton、本文 Noto Sans JP（Dela Gothic One と Anton のファイルは templates/fonts/ にあり、brand.css から読む。どちらも SIL Open Font License で無料。2026-11-11 入れた）
 - キッカー（分類ラベル）：「速報」「比較」「解説」「結果」の4つだけ。全部の画像で左上の同じ位置に付ける
 - 国旗の絵文字は画像の中で使わない（2）
-- サイズ：note アイキャッチ 1280×670、note 記事内の比較図 1280×960、Instagram カルーセル 1080×1350、リール・TikTok のカバー 1080×1920、X・Threads の添付画像 1600×900。媒体ごとの使い方は platforms/
+- サイズ：note アイキャッチ 1280×670、note 記事内の比較図 1280×960、Instagram カルーセル 1080×1350、リール・TikTok・YouTube Shorts のカバー 1080×1920、X・Threads の添付画像 1600×900。媒体ごとの使い方は platforms/
 - 作り方
   - Claude：templates/ の HTML（brand.css）から templates/render.py で書き出す
   - 運営者が手で作るとき：マスターは Canva に一本化（ブランドキット、背景リムーバ、一括作成）。Figma は無料のまま第2候補（使うなら Google Sheets Sync、Iconify、Unsplash）。CapCut は無料の範囲で自動字幕とカバー
-  - 投稿画面（note、Instagram、X、Threads、TikTok）にデザイン用のプラグインはない。note と Canva の連携は 2025-12-01 に終わっている
+  - 投稿画面（note、Instagram、X、Threads、TikTok、YouTube）にデザイン用のプラグインはない。note と Canva の連携は 2025-12-01 に終わっている
   - やらない：Figma 有料への早めの課金、remove.bg への課金、Adobe CC、素材サイトへの課金、プラグインの大量導入
   - Canva Pro（月1,180円／年11,800円）にするかは運営者が決める
 - まだ確かめていないので決めないこと：GPOne・Marca の投稿デザインの細かい検証、CapCut Pro の日本円の公式価格、Canva の Upscale がどのプランで使えるか
