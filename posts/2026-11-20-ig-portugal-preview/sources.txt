@@ -1,0 +1,20 @@
+# 出典（確認日 2026-11-20、すべて開いて読んだ記事）
+
+- OKDIARIO（ミゲル・ソリオ記者）11/20 03:03
+  https://okdiario.com/deportes/marquez-va-cautela-lo-importante-cerrarlo-da-igual-sabado-domingo-aqui-o-valencia-21189528
+  支える記述：場面2の大見出し（h1「Lo importante es cerrarlo」）、キャプションの「慎重に決めたい話」（h1「va con cautela」）
+- Europa Press（Menorca に転載）11/20 01:52
+  https://www.menorca.info/deportes/polideportivo/2026/11/19/2753611/marc-marquez-parece-titulo-esta-cerrado-puede-pasar-cualquier-cosa.html
+  支える記述：場面2の補足（h1「puede pasar cualquier cosa」）、キャプションの「2戦で14点」
+- Motorsport.com スペイン版（ジェルマン・ガルシア・カサノバ記者）11/20 01:10ごろ
+  https://es.motorsport.com/motogp/news/declaraciones-marquez-jueves-portimao-opcion-titulo-riesgos-todas-partes/10875676/
+  支える記述：場面4の大見出しのスペイン側の根拠、場面4の補足の「危険が見える」（h1「veo riesgos por todas partes」）
+- Fanpage.it（ファブリツィオ・リネッリ記者）11/20 01:44
+  https://www.fanpage.it/sport/motori/marc-marquez-vede-fantasmi-ovunque-alla-vigilia-del-decimo-titolo-stavo-andando-in-bici-ed-avevo-paura/
+  支える記述：場面3の大見出し（h1「Stavo andando in bici ed avevo paura」）、補足の「転ぶのが怖かった」（本文「avevo paura di cadere」）
+- MOW（コジモ・クラトラ記者）11/19
+  https://mowmag.com/sport/a-portimao-un-solo-ostacolo-tra-marc-marquez-e-il-decimo-mondiale-un-circuito-feroce-pieno-dacqua-domenica-in-bici-ero-spaventatissimo
+  支える記述：場面3の補足「2媒体とも」（h1「Domenica in bici ero spaventatissimo」）
+- LiveGP.it（ジョシュア・リッチ記者）11/20 03:15
+  https://www.livegp.it/pianeta-moto/motogp-la-conferenza-stampa-del-gp-portogallo-marquez-lobiettivo-fare-14-punti
+  支える記述：場面4の大見出しのイタリア側の根拠、キャプションの「目標？14点」（h1「L'obiettivo? Fare 14 punti」）
